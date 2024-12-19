@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {TargetEntity} from "../../email/entity/Target.entity";
 
 /**
@@ -13,7 +13,7 @@ export class TrackerEntity {
     @ManyToOne(() => TargetEntity, target => target.trackers, {onDelete: 'CASCADE'})
     target: TargetEntity;
 
-    @Column()
+    @CreateDateColumn()
     createdAt: Date;
 
     @Column({default: false})

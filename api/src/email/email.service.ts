@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {EmailEntity} from "./entity/Email.entity";
-import {MoreThanOrEqual, Repository} from "typeorm";
+import {LessThan, MoreThanOrEqual, Repository} from "typeorm";
 import {TargetEntity} from "./entity/Target.entity";
 
 @Injectable()
@@ -63,7 +63,7 @@ export class EmailService {
     getTargetsToSend() {
         return this.targetRepository.find({
             where: {
-                sendAt: MoreThanOrEqual(new Date())
+                sendAt: LessThan(new Date())
             }
         });
     }
