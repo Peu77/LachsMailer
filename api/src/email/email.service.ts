@@ -41,6 +41,25 @@ export class EmailService {
         });
     }
 
+    async distributeScheduleDates(id: number, days: number) {
+        const email = await this.emailRepository.findOneOrFail({
+            where: {id}, relations: {
+                targets: true
+            }
+        });
+
+        const targets = email.targets;
+        const now = new Date();
+        const max = new Date();
+        max.setDate(now.getDate() + days);
+        const diff = max.getTime() - now.getTime();
+        targets.forEach(target => {
+            target.sendAt = new Date(now.getTime() + Math.random() * diff);
+        });
+
+        return await this.targetRepository.save(targets);
+    }
+
     getTargetsToSend() {
         return this.targetRepository.find({
             where: {
@@ -49,17 +68,19 @@ export class EmailService {
         });
     }
 
-    resetTargetSendAt(targetId: number){
+    resetTargetSendAt(targetId: number) {
         return this.targetRepository.update(targetId, {
             sendAt: null
         });
     }
 
-    getTargetById(id: number, relations: {} = {}){
+    getTargetById(id: number, relations: {} = {}) {
         return this.targetRepository.findOne({where: {id}, relations});
     }
 
     deleteEmail(id: number) {
         return this.emailRepository.delete(id);
     }
+
+
 }

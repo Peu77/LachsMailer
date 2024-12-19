@@ -1,4 +1,4 @@
-import {BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Post} from '@nestjs/common';
+import {BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put} from '@nestjs/common';
 import {EmailService} from "./email.service";
 
 @Controller('email')
@@ -23,7 +23,16 @@ export class EmailController {
         }[]
     }, @Param("id", ParseIntPipe) id: number){
         try{
-            return this.emailService.addTarget(id, target);
+            return await this.emailService.addTarget(id, target);
+        }catch (e){
+            throw new BadRequestException(e.message);
+        }
+    }
+
+    @Put(":id/scheduleIn/:days")
+    async distributeScheduleDates(@Param("id", ParseIntPipe) id: number, @Param("days", ParseIntPipe) days: number){
+        try{
+            return await this.emailService.distributeScheduleDates(id, days);
         }catch (e){
             throw new BadRequestException(e.message);
         }
