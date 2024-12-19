@@ -42,7 +42,8 @@ export const EmailCard= ({email}: {email: EmailEntity}) => {
                     })
                 })}>Cancel</Button>
                 <Button onClick={() => distributeScheduleDates.mutate(days)}>Distribute</Button>
-                <Input placeholder={"days"} type="number" value={days} onChange={(e) => setDays(Number(e.target.value))}/>
+                <Input placeholder={"days"} style={{maxWidth: "90px"}} type="number" value={days} onChange={(e) => setDays(Number(e.target.value))}/>
+                <p>days</p>
             </CardFooter>
         </Card>
     )
