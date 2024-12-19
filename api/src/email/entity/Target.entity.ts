@@ -10,7 +10,7 @@ export class TargetEntity {
     @Column()
     email: string;
 
-    @Column()
+    @Column({nullable: true})
     sendAt: Date;
 
     @OneToMany(() => TrackerEntity, tracker => tracker.target)
