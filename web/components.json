@@ -5,7 +5,7 @@
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.js",
-    "css": "src/api/global.css",
+    "css": "src/global.css",
     "baseColor": "stone",
     "cssVariables": true,
     "prefix": ""
