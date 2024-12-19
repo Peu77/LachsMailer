@@ -17,6 +17,7 @@ export class EmailController {
     @Post(":id/target")
     async addTarget(@Body() target: {
         email: string,
+        sendAt: Date,
         variables: {
             key: string,
             value: string

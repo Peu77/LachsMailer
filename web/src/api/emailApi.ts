@@ -12,6 +12,7 @@ export interface EmailEntity {
 
 export interface TargetEntity {
     id: number;
+    sendAt: Date;
     email: string;
     emailEntity: EmailEntity;
     variables: TargetVariableEntity[];

@@ -4,6 +4,7 @@ import {AppService} from './app.service';
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import {EmailModule} from './email/email.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
+import { SchedulerModule } from './scheduler/scheduler.module';
 
 @Module({
     imports: [
@@ -28,7 +29,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
                     synchronize: true,
                 }
            }
-        }), EmailModule],
+        }), EmailModule, SchedulerModule],
     controllers: [AppController],
     providers: [AppService],
 })

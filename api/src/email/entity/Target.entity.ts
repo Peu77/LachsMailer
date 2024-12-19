@@ -1,5 +1,6 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {EmailEntity} from "./Email.entity";
+import {TrackerEntity} from "../../scheduler/entity/Tracker.entity";
 
 @Entity("email_target")
 export class TargetEntity {
@@ -8,6 +9,12 @@ export class TargetEntity {
 
     @Column()
     email: string;
+
+    @Column()
+    sendAt: Date;
+
+    @OneToMany(() => TrackerEntity, tracker => tracker.target)
+    trackers: TrackerEntity[];
 
     @JoinColumn()
     @ManyToOne(() => EmailEntity, email => email.targets)

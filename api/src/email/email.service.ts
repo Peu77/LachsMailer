@@ -18,7 +18,7 @@ export class EmailService {
         return this.emailRepository.save(email);
     }
 
-    async addTarget(id: number, target: { email: string; variables: { key: string; value: string }[] }) {
+    async addTarget(id: number, target: { email: string; sendAt: Date, variables: { key: string; value: string }[] }) {
         const email = await this.emailRepository.findOneBy({id});
         if (!email) {
             throw new Error("Email not found");
@@ -26,6 +26,7 @@ export class EmailService {
         const targetEntity = {
             email: target.email,
             emailEntity: email,
+            sendAt: target.sendAt,
             variables: target.variables
         };
         return this.targetRepository.save(targetEntity);
