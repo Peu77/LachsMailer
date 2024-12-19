@@ -16,6 +16,7 @@ export interface TargetEntity {
     email: string;
     emailEntity: EmailEntity;
     variables: TargetVariableEntity[];
+    trackers: TrackerEntity[];
 }
 
 export interface TargetVariableEntity {
@@ -23,6 +24,17 @@ export interface TargetVariableEntity {
     target: TargetEntity;
     key: string;
     value: string;
+}
+
+export interface TrackerEntity {
+    id: number;
+    createdAt: Date;
+    opened: boolean;
+    openedAt: Date;
+    clicked: boolean;
+    clickedAt: Date;
+    ipAddress: string;
+    headers: string;
 }
 
 export function useGetEmails() {
@@ -75,15 +87,23 @@ export function useDistributeScheduleDates(emailId: number) {
             const response = await axiosInstance.put<TargetEntity[]>(`/email/${emailId}/scheduleIn/${days}`);
             return response.data
         },
-        onSuccess: async (targets: TargetEntity[]) => {
-            queryClient.setQueryData(["emails"], (oldData: EmailEntity[] | undefined) => {
-                return oldData?.map(email => {
-                    if (email.id === emailId) {
-                        email.targets = targets
-                    }
-                    return email
-                })
-            })
+        onSuccess: async () => {
+           await  queryClient.invalidateQueries(["emails"]);
+        }
+    })
+}
+
+export function useCancelSchedule(emailId: number) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["emails", "cancel", emailId],
+        mutationFn: async () => {
+            const response = await axiosInstance.put<TargetEntity[]>(`/email/${emailId}/cancel`);
+            return response.data
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries(["emails"]);
         }
     })
 }

@@ -1,13 +1,17 @@
-import {EmailEntity, useDeleteEmailMutation, useDistributeScheduleDates} from "@/api/emailApi.ts";
+import {EmailEntity, useCancelSchedule, useDeleteEmailMutation, useDistributeScheduleDates} from "@/api/emailApi.ts";
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useToast} from "@/hooks/use-toast.ts";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {Target} from "@/emails/target.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {useState} from "react";
 
 export const EmailCard= ({email}: {email: EmailEntity}) => {
     const deleteEmail = useDeleteEmailMutation(email.id)
     const distributeScheduleDates = useDistributeScheduleDates(email.id)
+    const cancelSchedule = useCancelSchedule(email.id)
+    const [days, setDays] = useState(30)
     const {toast} = useToast()
 
     return (
@@ -31,7 +35,14 @@ export const EmailCard= ({email}: {email: EmailEntity}) => {
                         description: "the email has been deleted",
                     })
                 })}>Delete</Button>
-                <Button onClick={() => distributeScheduleDates.mutate(4)}>Distribute</Button>
+                <Button variant="destructive" onClick={() => cancelSchedule.mutateAsync().then(() => {
+                    toast({
+                        title: "Email",
+                        description: "the email has been canceled",
+                    })
+                })}>Cancel</Button>
+                <Button onClick={() => distributeScheduleDates.mutate(days)}>Distribute</Button>
+                <Input placeholder={"days"} type="number" value={days} onChange={(e) => setDays(Number(e.target.value))}/>
             </CardFooter>
         </Card>
     )

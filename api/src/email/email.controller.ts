@@ -38,6 +38,15 @@ export class EmailController {
         }
     }
 
+    @Put(":id/cancel")
+    async cancelSchedule(@Param("id", ParseIntPipe) id: number){
+        try{
+            return await this.emailService.cancelSchedule(id);
+        }catch (e){
+            throw new BadRequestException(e.message);
+        }
+    }
+
     @Get()
     async getEmails(){
         return this.emailService.getEmails();

@@ -35,8 +35,9 @@ export class EmailService {
         return this.emailRepository.find({
             relations: {
                 targets: {
-                    variables: true
-                }
+                    variables: true,
+                    trackers: true
+                },
             }
         });
     }
@@ -83,4 +84,9 @@ export class EmailService {
     }
 
 
+    async cancelSchedule(emailId: number) {
+        return this.targetRepository.update({emailEntity: {id: emailId}}, {
+            sendAt: null
+        })
+    }
 }
