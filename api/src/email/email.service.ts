@@ -40,4 +40,8 @@ export class EmailService {
             }
         });
     }
+
+    deleteEmail(id: number) {
+        return this.emailRepository.delete(id);
+    }
 }

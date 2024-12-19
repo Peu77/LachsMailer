@@ -1,4 +1,4 @@
-import {BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Post} from '@nestjs/common';
+import {BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Post} from '@nestjs/common';
 import {EmailService} from "./email.service";
 
 @Controller('email')
@@ -32,5 +32,10 @@ export class EmailController {
     @Get()
     async getEmails(){
         return this.emailService.getEmails();
+    }
+
+    @Delete(":id")
+    async deleteEmail(@Param("id", ParseIntPipe) id: number){
+        return this.emailService.deleteEmail(id);
     }
 }
