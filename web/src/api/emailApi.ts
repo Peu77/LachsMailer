@@ -50,3 +50,17 @@ export function useCreateEmailMutation() {
         }
     })
 }
+
+export function useDeleteEmailMutation(emailId: number) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["emails", "delete", emailId],
+        mutationFn: async () => axiosInstance.delete(`/email/${emailId}`),
+        onSuccess: () => {
+            queryClient.setQueryData(["emails"], (oldData: EmailEntity[] | undefined) => {
+                return oldData?.filter(email => email.id !== emailId)
+            })
+        }
+    })
+}

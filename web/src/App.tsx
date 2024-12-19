@@ -1,4 +1,6 @@
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {Emails} from "@/emails/emails.tsx";
+import "./global.css"
 
 const queryClient = new QueryClient()
 
@@ -6,7 +8,7 @@ function App() {
     return (
         <>
             <QueryClientProvider client={queryClient}>
-                <h1>test</h1>
+                <Emails />
             </QueryClientProvider>
         </>
     )
