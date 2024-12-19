@@ -65,3 +65,25 @@ export function useDeleteEmailMutation(emailId: number) {
         }
     })
 }
+
+export function useDistributeScheduleDates(emailId: number) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["emails", "distribute", emailId],
+        mutationFn: async (days: number) => {
+            const response = await axiosInstance.put<TargetEntity[]>(`/email/${emailId}/scheduleIn/${days}`);
+            return response.data
+        },
+        onSuccess: async (targets: TargetEntity[]) => {
+            queryClient.setQueryData(["emails"], (oldData: EmailEntity[] | undefined) => {
+                return oldData?.map(email => {
+                    if (email.id === emailId) {
+                        email.targets = targets
+                    }
+                    return email
+                })
+            })
+        }
+    })
+}
