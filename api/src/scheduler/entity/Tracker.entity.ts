@@ -5,7 +5,7 @@ import {TargetEntity} from "../../email/entity/Target.entity";
  * If a email is sent to a target, a tracker is created to track the email and the history of the target.
  */
 @Entity()
-export class TrackerEntity{
+export class TrackerEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -27,4 +27,10 @@ export class TrackerEntity{
 
     @Column({nullable: true})
     clickedAt: Date;
+
+    @Column({nullable: true})
+    ipAddress: string;
+
+    @Column({nullable: true})
+    headers: string;
 }
