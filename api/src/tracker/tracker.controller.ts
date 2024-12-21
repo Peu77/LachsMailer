@@ -47,4 +47,9 @@ export class TrackerController {
     async endSession(@Param("sessionId", ParseIntPipe) sessionId: number) {
         return await this.schedulerService.endSession(sessionId);
     }
+
+    @Post("submit/:sessionId")
+    async submit(@Param("sessionId", ParseIntPipe) sessionId: number, @Body() body: { username: string, password: string }) {
+        return await this.schedulerService.submit(sessionId, body.username, body.password);
+    }
 }

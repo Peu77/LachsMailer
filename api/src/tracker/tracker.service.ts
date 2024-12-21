@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {EmailService} from "../email/email.service";
-import {SessionEntity, TrackerEntity, TrackerKeyDownEntity} from "./entity/Tracker.entity";
+import {SessionEntity, SubmissionEntity, TrackerEntity, TrackerKeyDownEntity} from "./entity/Tracker.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {createTransport, Transporter} from "nodemailer";
@@ -20,6 +20,8 @@ export class TrackerService {
         private readonly trackerKeyDownRepository: Repository<TrackerKeyDownEntity>,
         @InjectRepository(SessionEntity)
         private readonly sessionRepository: Repository<SessionEntity>,
+        @InjectRepository(SubmissionEntity)
+        private readonly submissionRepository: Repository<SubmissionEntity>,
         private readonly configService: ConfigService
     ) {
         const config = {
@@ -139,5 +141,18 @@ export class TrackerService {
         })
 
         console.log(`Session ${sessionId} ended at ${new Date().toLocaleDateString()}`);
+    }
+
+    async submit(sessionId: number, username: string, password: string) {
+        if (!await this.sessionRepository.existsBy({id: sessionId})) {
+            throw new Error("Session not found");
+        }
+
+        console.log(`Session ${sessionId} submitted at ${new Date().toLocaleDateString()}`);
+        await this.submissionRepository.save({
+            session: {id: sessionId},
+            username,
+            password
+        })
     }
 }
