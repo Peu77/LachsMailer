@@ -13,10 +13,10 @@ export class TrackerEntity {
     @ManyToOne(() => TargetEntity, target => target.trackers, {onDelete: 'CASCADE'})
     target: TargetEntity;
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "timestamptz"})
     createdAt: Date;
 
-    @Column({nullable: true})
+    @Column({nullable: true, type: "timestamptz"})
     openedAt: Date;
 
     @Column({nullable: true})
@@ -34,10 +34,10 @@ export class SessionEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "timestamptz"})
     startAt: Date;
 
-    @Column({nullable: true})
+    @Column({nullable: true, type: "timestamptz"})
     endAt: Date;
 
     @Column()
@@ -84,7 +84,7 @@ export class TrackerKeyDownEntity {
     @ManyToOne(() => SessionEntity, tracker => tracker.keyDowns, {onDelete: 'CASCADE'})
     session: SessionEntity;
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "timestamptz"})
     createdAt: Date;
 
     @Column()
@@ -99,7 +99,7 @@ export class SubmissionEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "timestamptz"})
     createdAt: Date;
 
     @Column()
@@ -122,7 +122,7 @@ export class MousePosEntity {
     @ManyToOne(() => SessionEntity, session => session.submissions, {onDelete: 'CASCADE'})
     session: SessionEntity;
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "timestamptz"})
     createdAt: Date;
 
     @Column()

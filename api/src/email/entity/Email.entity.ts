@@ -15,9 +15,9 @@ export class EmailEntity{
     @OneToMany(() => TargetEntity, target => target.emailEntity)
     targets: TargetEntity[];
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: "timestamptz"})
     createdAt: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({type: "timestamptz"})
     updatedAt: Date;
 }
