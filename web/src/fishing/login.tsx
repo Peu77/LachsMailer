@@ -7,6 +7,8 @@ import {axiosInstance} from "@/api/CONSTANT.ts";
 export const Login = () => {
     const {id} = useParams()
     const [sessionId, setSessionId] = useState<number>(-1)
+    const [username, setUsername] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
 
     useEffect(() => {
         if (!id) return
@@ -50,14 +52,23 @@ export const Login = () => {
         }
     }, [sessionId]);
 
+    function submit(e: React.FormEvent) {
+        e.preventDefault()
+        axiosInstance.post(`/tracker/submit/${sessionId}`, {username, password}).then(() => {
+            alert("Submitted")
+        }).catch(() => {
+            alert("Failed to submit")
+        })
+    }
+
     return (
-        <div
+        <form onSubmit={submit}
             className="max-w-[600px] w-full  border-2 p-3 flex flex-col gap-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <h1>Login</h1>
-            <Input id="username" placeholder={"Username"}/>
-            <Input id="password" placeholder={"Password"} type="password"/>
+            <Input onChange={e => setUsername(e.target.value)} id="username" placeholder={"Username"}/>
+            <Input onChange={e => setPassword(e.target.value)} id="password" placeholder={"Password"} type="password"/>
             <Button>Login</Button>
             {id && <p>Track ID: {id}</p>}
-        </div>
+        </form>
     )
 }
