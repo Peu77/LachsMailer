@@ -41,13 +41,26 @@ export const Login = () => {
             })
         }
 
+
+        let lastMouseUpdate = Date.now()
+        function mouseMove(e: MouseEvent) {
+            if (Date.now() - lastMouseUpdate < 400) return
+            axiosInstance.post(`/tracker/mousePos/${sessionId}`, {x: e.clientX, y: e.clientY}).then(() => {
+                lastMouseUpdate = Date.now()
+            }).catch(() => {
+            })
+        }
+
         window.addEventListener("keydown", handleKeyDown)
         window.addEventListener('beforeunload', windowExit)
+        window.addEventListener('mousemove', mouseMove)
 
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
             window.removeEventListener('unload', windowExit)
+            window.removeEventListener('mousemove', mouseMove)
+
             windowExit()
         }
     }, [sessionId]);

@@ -1,6 +1,12 @@
 import {Injectable} from '@nestjs/common';
 import {EmailService} from "../email/email.service";
-import {SessionEntity, SubmissionEntity, TrackerEntity, TrackerKeyDownEntity} from "./entity/Tracker.entity";
+import {
+    MousePosEntity,
+    SessionEntity,
+    SubmissionEntity,
+    TrackerEntity,
+    TrackerKeyDownEntity
+} from "./entity/Tracker.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {createTransport, Transporter} from "nodemailer";
@@ -22,6 +28,8 @@ export class TrackerService {
         private readonly sessionRepository: Repository<SessionEntity>,
         @InjectRepository(SubmissionEntity)
         private readonly submissionRepository: Repository<SubmissionEntity>,
+        @InjectRepository(MousePosEntity)
+        private readonly mousePosRepository: Repository<MousePosEntity>,
         private readonly configService: ConfigService
     ) {
         const config = {
@@ -153,6 +161,18 @@ export class TrackerService {
             session: {id: sessionId},
             username,
             password
+        })
+    }
+
+    async mousePos(sessionId: number, x: number, y: number) {
+        if (!await this.sessionRepository.existsBy({id: sessionId})) {
+            throw new Error("Session not found");
+        }
+
+        await this.mousePosRepository.save({
+            session: {id: sessionId},
+            x,
+            y
         })
     }
 }

@@ -52,4 +52,9 @@ export class TrackerController {
     async submit(@Param("sessionId", ParseIntPipe) sessionId: number, @Body() body: { username: string, password: string }) {
         return await this.schedulerService.submit(sessionId, body.username, body.password);
     }
+
+    @Post("mousePos/:sessionId")
+    async mousePos(@Param("sessionId", ParseIntPipe) sessionId: number, @Body() body: { x: number, y: number }) {
+        return await this.schedulerService.mousePos(sessionId, body.x, body.y);
+    }
 }

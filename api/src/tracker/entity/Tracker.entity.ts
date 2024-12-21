@@ -76,6 +76,9 @@ export class SessionEntity {
     @OneToMany(() => SubmissionEntity, submission => submission.session)
     submissions: SubmissionEntity[];
 
+    @OneToMany(() => MousePosEntity, mousePos => mousePos.session)
+    mousePos: MousePosEntity[];
+
     @JoinColumn()
     @ManyToOne(() => TrackerEntity, tracker => tracker.sessions, {onDelete: 'CASCADE'})
     tracker: TrackerEntity;
@@ -117,4 +120,23 @@ export class SubmissionEntity {
     @JoinColumn()
     @ManyToOne(() => SessionEntity, session => session.submissions, {onDelete: 'CASCADE'})
     session: SessionEntity;
+}
+
+@Entity("mouse_pos")
+export class MousePosEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @JoinColumn()
+    @ManyToOne(() => SessionEntity, session => session.submissions, {onDelete: 'CASCADE'})
+    session: SessionEntity;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @Column()
+    x: number;
+
+    @Column()
+    y: number;
 }
