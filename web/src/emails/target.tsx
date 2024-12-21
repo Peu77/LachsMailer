@@ -36,7 +36,7 @@ export const Target = ({target}: { target: TargetEntity }) => {
                                             <b>Sessions:</b>
                                             {tracker.sessions.sort((a,b) => a.id - b.id).map(session => (
                                                 <div className={cn(
-                                                    "mb-2 border-2 p-2",
+                                                    "mb-2 border-2 p-2 rounded",
                                                     session.endAt !== null ? "border-green-400" : "border-orange-400"
                                                 )} key={session.id}>
                                                     <p>Session id: {session.id}</p>
