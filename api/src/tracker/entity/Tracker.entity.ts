@@ -73,6 +73,9 @@ export class SessionEntity {
     @OneToMany(() => TrackerKeyDownEntity, keyDown => keyDown.session)
     keyDowns: TrackerKeyDownEntity[];
 
+    @OneToMany(() => SubmissionEntity, submission => submission.session)
+    submissions: SubmissionEntity[];
+
     @JoinColumn()
     @ManyToOne(() => TrackerEntity, tracker => tracker.sessions, {onDelete: 'CASCADE'})
     tracker: TrackerEntity;
@@ -95,4 +98,23 @@ export class TrackerKeyDownEntity {
 
     @Column()
     key: string;
+}
+
+@Entity("submission")
+export class SubmissionEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @Column()
+    username: string;
+
+    @Column()
+    password: string;
+
+    @JoinColumn()
+    @ManyToOne(() => SessionEntity, session => session.submissions, {onDelete: 'CASCADE'})
+    session: SessionEntity;
 }
