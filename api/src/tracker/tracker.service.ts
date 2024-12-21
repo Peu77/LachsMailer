@@ -101,4 +101,16 @@ export class TrackerService {
             key
         })
     }
+
+    async open(trackerId: number) {
+        if (!await this.trackerRepository.existsBy({id: trackerId})) {
+            throw new Error("Tracker not found");
+        }
+        console.log(`Tracker ${trackerId} opened`);
+
+        await this.trackerRepository.update(trackerId, {
+            clicked: true,
+            clickedAt: new Date()
+        });
+    }
 }

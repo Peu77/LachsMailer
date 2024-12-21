@@ -25,4 +25,14 @@ export class TrackerController {
         }
         return "ok";
     }
+
+    @Post("open/:trackerId")
+    async open(@Param("trackerId", ParseIntPipe) trackerId: number) {
+        try{
+            await this.schedulerService.open(trackerId);
+        }catch (e){
+            throw new BadRequestException("bad input");
+        }
+        return "ok";
+    }
 }
