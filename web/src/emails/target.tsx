@@ -15,7 +15,7 @@ export const Target = ({target}: { target: TargetEntity }) => {
                 <div>
                     <p>Tracker:</p>
                     <Accordion type={"single"} collapsible>
-                        {target.trackers.map(tracker => (
+                        {target.trackers.sort((a, b) => a.id - b.id).map(tracker => (
                             <AccordionItem value={tracker.id.toString()} key={tracker.id}>
                                 <AccordionTrigger className={cn(
                                     "text-red-300",
@@ -34,7 +34,7 @@ export const Target = ({target}: { target: TargetEntity }) => {
                                     {tracker.sessions && tracker.sessions.length > 0 && (
                                         <div className="mt-2">
                                             <b>Sessions:</b>
-                                            {tracker.sessions.map(session => (
+                                            {tracker.sessions.sort((a,b) => a.id - b.id).map(session => (
                                                 <div className={cn(
                                                     "mb-2 border-2 p-2",
                                                     session.endAt !== null ? "border-green-400" : "border-orange-400"
