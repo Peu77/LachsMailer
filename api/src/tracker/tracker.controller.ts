@@ -16,7 +16,7 @@ export class TrackerController {
         return "ok";
     }
 
-    @Post("pressKey/:tackerId")
+    @Post("pressKey/:trackerId")
     async pressKey(@Param("trackerId", ParseIntPipe) trackerId: number, @Body() body: {key: string}) {
         try{
             await this.schedulerService.pressKey(trackerId, body.key);
