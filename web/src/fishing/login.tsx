@@ -53,11 +53,13 @@ export const Login = () => {
 
         window.addEventListener("keydown", handleKeyDown)
         window.addEventListener('beforeunload', windowExit)
+        window.addEventListener('unload', windowExit)
         window.addEventListener('mousemove', mouseMove)
 
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
+            window.removeEventListener('beforeunload', windowExit)
             window.removeEventListener('unload', windowExit)
             window.removeEventListener('mousemove', mouseMove)
 
