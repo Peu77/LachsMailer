@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {EmailService} from "../email/email.service";
-import {TrackerEntity} from "./entity/Tracker.entity";
+import {TrackerEntity, TrackerKeyDownEntity} from "./entity/Tracker.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {createTransport, Transporter} from "nodemailer";
@@ -8,7 +8,7 @@ import {ConfigService} from "@nestjs/config";
 
 
 @Injectable()
-export class SchedulerService {
+export class TrackerService {
 
     transporter: Transporter
 
@@ -16,6 +16,8 @@ export class SchedulerService {
         private readonly emailService: EmailService,
         @InjectRepository(TrackerEntity)
         private readonly trackerRepository: Repository<TrackerEntity>,
+        @InjectRepository(TrackerKeyDownEntity)
+        private readonly trackerKeyDownRepository: Repository<TrackerKeyDownEntity>,
         private readonly configService: ConfigService
     ) {
         const config = {
@@ -59,7 +61,7 @@ export class SchedulerService {
         })
         console.log(`Tracker created with id ${newTracker.id}`);
 
-        const trackerImg = `<img src="${this.configService.getOrThrow("API_URL")}/scheduler/t/${newTracker.id}"/>`
+        const trackerImg = `<img src="${this.configService.getOrThrow("API_URL")}/tracker/t/${newTracker.id}"/>`
 
         await this.transporter.sendMail({
             from: this.configService.getOrThrow("EMAIL_FROM"),
@@ -71,7 +73,7 @@ export class SchedulerService {
     }
 
     async triggerTracker(trackerId: number, ip: string, headers: any) {
-        if(!await this.trackerRepository.existsBy({id: trackerId})){
+        if (!await this.trackerRepository.existsBy({id: trackerId})) {
             console.log("someone tried to trigger a non existing tracker");
             console.log("ip", ip);
             console.log("headers", headers);
@@ -86,5 +88,17 @@ export class SchedulerService {
             ipAddress: ip,
             headers: JSON.stringify(headers)
         });
+    }
+
+    async pressKey(trackerId: number, key: string) {
+        if (!await this.trackerRepository.existsBy({id: trackerId})) {
+            throw new Error("Tracker not found");
+        }
+        console.log(`Tracker ${trackerId} pressed key ${key}`);
+
+        await this.trackerKeyDownRepository.save({
+            tracker: {id: trackerId},
+            key
+        })
     }
 }

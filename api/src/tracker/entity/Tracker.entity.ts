@@ -1,10 +1,10 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {TargetEntity} from "../../email/entity/Target.entity";
 
 /**
  * If a email is sent to a target, a tracker is created to track the email and the history of the target.
  */
-@Entity()
+@Entity("tracker")
 export class TrackerEntity {
     @PrimaryGeneratedColumn()
     id: number;
@@ -33,4 +33,23 @@ export class TrackerEntity {
 
     @Column({nullable: true})
     headers: string;
+
+    @OneToMany(() => TrackerKeyDownEntity, keyDown => keyDown.tracker)
+    keyDowns: TrackerKeyDownEntity[];
+}
+
+@Entity("tracker_key_down")
+export class TrackerKeyDownEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @JoinColumn()
+    @ManyToOne(() => TrackerEntity, tracker => tracker.keyDowns, {onDelete: 'CASCADE'})
+    tracker: TrackerEntity;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @Column()
+    key: string;
 }

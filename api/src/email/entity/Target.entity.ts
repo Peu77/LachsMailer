@@ -1,6 +1,6 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {EmailEntity} from "./Email.entity";
-import {TrackerEntity} from "../../scheduler/entity/Tracker.entity";
+import {TrackerEntity} from "../../tracker/entity/Tracker.entity";
 
 @Entity("email_target")
 export class TargetEntity {
@@ -17,7 +17,7 @@ export class TargetEntity {
     trackers: TrackerEntity[];
 
     @JoinColumn()
-    @ManyToOne(() => EmailEntity, email => email.targets)
+    @ManyToOne(() => EmailEntity, email => email.targets, {onDelete: "CASCADE"})
     emailEntity: EmailEntity;
 
     @OneToMany(() => TargetVariableEntity, targetVariable => targetVariable.target, {cascade: true})
