@@ -4,7 +4,7 @@ import {AppService} from './app.service';
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import {EmailModule} from './email/email.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import { SchedulerModule } from './tracker/scheduler.module';
+import { TrackerModule } from './tracker/tracker.module';
 
 @Module({
     imports: [
@@ -29,7 +29,7 @@ import { SchedulerModule } from './tracker/scheduler.module';
                     synchronize: true,
                 }
            }
-        }), EmailModule, SchedulerModule],
+        }), EmailModule, TrackerModule],
     controllers: [AppController],
     providers: [AppService],
 })

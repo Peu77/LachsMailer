@@ -1,34 +1,60 @@
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useParams} from "react-router";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {axiosInstance} from "@/api/CONSTANT.ts";
 
 export const Login = () => {
     const {id} = useParams()
+    const [sessionId, setSessionId] = useState<number>(-1)
 
     useEffect(() => {
-        if(!id) return
+        if (!id) return
 
-        axiosInstance.post(`/tracker/open/${id}`).catch(() => {})
+        axiosInstance.post<number>(`/tracker/startSession/${id}`, {
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language,
+            cookiesEnabled: navigator.cookieEnabled,
+            screenSize: screen.width + "x" + screen.height,
+            windowSize: window.innerWidth + "x" + window.innerHeight
+        }).then(response => {
+            setSessionId(response.data)
+        }).catch(() => {
+        })
+    }, [id])
 
-        function handleKeyDown(e: KeyboardEvent){
-            axiosInstance.post(`/tracker/pressKey/${id}`, {key: e.key.toString()}).catch(() => {})
+    useEffect(() => {
+        if (sessionId === -1) return
+
+        function handleKeyDown(e: KeyboardEvent) {
+            axiosInstance.post(`/tracker/pressKey/${sessionId}`, {key: e.key.toString()}).catch(() => {
+            })
+        }
+
+        function windowExit() {
+            axiosInstance.put(`/tracker/endSession/${sessionId}`).catch(() => {
+            })
         }
 
         window.addEventListener("keydown", handleKeyDown)
+        window.addEventListener('beforeunload', windowExit)
+
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
+            window.removeEventListener('unload', windowExit)
+            windowExit()
         }
-    }, [id])
+    }, [sessionId]);
 
     return (
-        <div className="max-w-[600px] w-full  border-2 p-3 flex flex-col gap-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div
+            className="max-w-[600px] w-full  border-2 p-3 flex flex-col gap-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <h1>Login</h1>
-                <Input placeholder={"Username"} />
-                <Input placeholder={"Password"} type="password" />
-                <Button>Login</Button>
+            <Input placeholder={"Username"}/>
+            <Input placeholder={"Password"} type="password"/>
+            <Button>Login</Button>
             {id && <p>Track ID: {id}</p>}
         </div>
     )

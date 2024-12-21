@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {EmailService} from "../email/email.service";
-import {TrackerEntity, TrackerKeyDownEntity} from "./entity/Tracker.entity";
+import {SessionEntity, TrackerEntity, TrackerKeyDownEntity} from "./entity/Tracker.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {createTransport, Transporter} from "nodemailer";
@@ -18,6 +18,8 @@ export class TrackerService {
         private readonly trackerRepository: Repository<TrackerEntity>,
         @InjectRepository(TrackerKeyDownEntity)
         private readonly trackerKeyDownRepository: Repository<TrackerKeyDownEntity>,
+        @InjectRepository(SessionEntity)
+        private readonly sessionRepository: Repository<SessionEntity>,
         private readonly configService: ConfigService
     ) {
         const config = {
@@ -90,27 +92,51 @@ export class TrackerService {
         });
     }
 
-    async pressKey(trackerId: number, key: string) {
-        if (!await this.trackerRepository.existsBy({id: trackerId})) {
-            throw new Error("Tracker not found");
+    async pressKey(sessionId: number, key: string) {
+        if (!await this.sessionRepository.existsBy({id: sessionId})) {
+            throw new Error("Session not found");
         }
-        console.log(`Tracker ${trackerId} pressed key ${key}`);
 
         await this.trackerKeyDownRepository.save({
-            tracker: {id: trackerId},
+            session: {id: sessionId},
             key
         })
     }
 
-    async open(trackerId: number) {
+    async startSession(trackerId: number, userData: {
+        ipAddress: string,
+        userAgent: string,
+        platform: string,
+        language: string
+        cookiesEnabled: boolean,
+        screenSize: string,
+        windowSize: string
+    }): Promise<number> {
         if (!await this.trackerRepository.existsBy({id: trackerId})) {
             throw new Error("Tracker not found");
         }
-        console.log(`Tracker ${trackerId} opened`);
 
-        await this.trackerRepository.update(trackerId, {
-            clicked: true,
-            clickedAt: new Date()
-        });
+        const session = await this.sessionRepository.save({
+            tracker: {id: trackerId},
+            ...userData
+        })
+
+        console.log(`Session ${session.id} started at ${new Date().toLocaleDateString()}`);
+
+
+        return session.id;
+    }
+
+    async endSession(sessionId: number) {
+        if (!await this.sessionRepository.existsBy({id: sessionId})) {
+            throw new Error("Session not found");
+
+        }
+
+        await this.sessionRepository.update(sessionId, {
+            endAt: new Date()
+        })
+
+        console.log(`Session ${sessionId} ended at ${new Date().toLocaleDateString()}`);
     }
 }

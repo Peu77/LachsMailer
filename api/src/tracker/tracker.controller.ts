@@ -1,4 +1,4 @@
-import {BadRequestException, Body, Controller, Get, Ip, Param, ParseIntPipe, Post, Request} from '@nestjs/common';
+import {BadRequestException, Body, Controller, Get, Ip, Param, ParseIntPipe, Post, Put, Request} from '@nestjs/common';
 import {TrackerService} from "./tracker.service";
 
 @Controller('tracker')
@@ -8,31 +8,43 @@ export class TrackerController {
 
     @Get("t/:trackerId")
     async triggerTracker(@Param("trackerId") trackerId: number, @Ip() ip: string, @Request() req: Request) {
-        try{
+        try {
             await this.schedulerService.triggerTracker(trackerId, ip, req.headers);
-        }catch (e){
+        } catch (e) {
             throw new BadRequestException("bad input");
         }
         return "ok";
     }
 
     @Post("pressKey/:trackerId")
-    async pressKey(@Param("trackerId", ParseIntPipe) trackerId: number, @Body() body: {key: string}) {
-        try{
+    async pressKey(@Param("trackerId", ParseIntPipe) trackerId: number, @Body() body: { key: string }) {
+        try {
             await this.schedulerService.pressKey(trackerId, body.key);
-        }catch (e){
+        } catch (e) {
             throw new BadRequestException("bad input");
         }
         return "ok";
     }
 
-    @Post("open/:trackerId")
-    async open(@Param("trackerId", ParseIntPipe) trackerId: number) {
-        try{
-            await this.schedulerService.open(trackerId);
-        }catch (e){
-            throw new BadRequestException("bad input");
-        }
-        return "ok";
+    @Post("startSession/:trackerId")
+    async startSession(@Param("trackerId", ParseIntPipe) trackerId: number,
+               @Ip() ip: string,
+               @Body() body: {
+                   userAgent: string,
+                   platform: string,
+                   language: string,
+                   cookiesEnabled: boolean,
+                   screenSize: string,
+                   windowSize: string
+               }) {
+        return await this.schedulerService.startSession(trackerId, {
+            ipAddress: ip,
+            ...body
+        });
+    }
+
+    @Put("endSession/:sessionId")
+    async endSession(@Param("sessionId", ParseIntPipe) sessionId: number) {
+        return await this.schedulerService.endSession(sessionId);
     }
 }

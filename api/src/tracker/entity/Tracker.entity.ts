@@ -34,8 +34,48 @@ export class TrackerEntity {
     @Column({nullable: true})
     headers: string;
 
-    @OneToMany(() => TrackerKeyDownEntity, keyDown => keyDown.tracker)
+    @OneToMany(() => SessionEntity, session => session.tracker)
+    sessions: SessionEntity[];
+}
+
+@Entity("session")
+export class SessionEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @CreateDateColumn()
+    startAt: Date;
+
+    @Column({nullable: true})
+    endAt: Date;
+
+    @Column()
+    ipAddress: string;
+
+    @Column()
+    userAgent: string;
+
+    @Column()
+    platform: string;
+
+    @Column()
+    language: string;
+
+    @Column()
+    cookiesEnabled: boolean;
+
+    @Column()
+    screenSize: string;
+
+    @Column()
+    windowSize: string;
+
+    @OneToMany(() => TrackerKeyDownEntity, keyDown => keyDown.session)
     keyDowns: TrackerKeyDownEntity[];
+
+    @JoinColumn()
+    @ManyToOne(() => TrackerEntity, tracker => tracker.sessions, {onDelete: 'CASCADE'})
+    tracker: TrackerEntity;
 }
 
 @Entity("tracker_key_down")
@@ -44,8 +84,8 @@ export class TrackerKeyDownEntity {
     id: number;
 
     @JoinColumn()
-    @ManyToOne(() => TrackerEntity, tracker => tracker.keyDowns, {onDelete: 'CASCADE'})
-    tracker: TrackerEntity;
+    @ManyToOne(() => SessionEntity, tracker => tracker.keyDowns, {onDelete: 'CASCADE'})
+    session: SessionEntity;
 
     @CreateDateColumn()
     createdAt: Date;
