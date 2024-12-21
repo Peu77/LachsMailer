@@ -74,13 +74,24 @@ export class TrackerService {
         console.log(`Tracker created with id ${newTracker.id}`);
 
         const trackerImg = `<img src="${this.configService.getOrThrow("API_URL")}/tracker/t/${newTracker.id}"/>`
+        let htmlContext = target.emailEntity.body + trackerImg;
+
+        if (target.variables.length > 0) {
+            target.variables.forEach(variable => {
+                htmlContext = htmlContext.replaceAll(`{${variable.key}}`, variable.value);
+            });
+        }
+
+        htmlContext = htmlContext.replaceAll(`{trackerId}`, newTracker.id.toString());
+
+        console.log("htmlContext", htmlContext);
 
         await this.transporter.sendMail({
             from: this.configService.getOrThrow("EMAIL_FROM"),
             to: target.email,
             subject: target.emailEntity.subject,
             text: "",
-            html: target.emailEntity.body + trackerImg
+            html: htmlContext
         })
     }
 
@@ -124,7 +135,7 @@ export class TrackerService {
         windowSize: string
     }): Promise<number> {
         if (!await this.trackerRepository.existsBy({id: trackerId})) {
-            throw new Error("Tracker not found");
+            throw new Error("Tracker not found: " + trackerId);
         }
 
         const session = await this.sessionRepository.save({
