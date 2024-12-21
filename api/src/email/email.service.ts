@@ -36,7 +36,11 @@ export class EmailService {
             relations: {
                 targets: {
                     variables: true,
-                    trackers: true
+                    trackers: {
+                        sessions: {
+                            submissions: true
+                        }
+                    }
                 },
             }
         });

@@ -19,22 +19,40 @@ export interface TargetEntity {
     trackers: TrackerEntity[];
 }
 
+export interface TrackerEntity {
+    id: number;
+    createdAt: Date;
+    openedAt: Date;
+    ipAddress: string;
+    headers: string;
+    sessions: SessionEntity[];
+}
+
+export interface SessionEntity {
+    id: number;
+    startAt: Date;
+    endAt: Date;
+    ipAddress: string;
+    userAgent: string;
+    platform: string;
+    language: string;
+    cookiesEnabled: boolean;
+    screenSize: string;
+    windowSize: string;
+    submissions: SubmissionEntity[];
+}
+
+export interface SubmissionEntity {
+    id: number;
+    username: string;
+    password: string;
+}
+
 export interface TargetVariableEntity {
     id: number;
     target: TargetEntity;
     key: string;
     value: string;
-}
-
-export interface TrackerEntity {
-    id: number;
-    createdAt: Date;
-    opened: boolean;
-    openedAt: Date;
-    clicked: boolean;
-    clickedAt: Date;
-    ipAddress: string;
-    headers: string;
 }
 
 export function useGetEmails() {

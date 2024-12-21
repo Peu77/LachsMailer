@@ -16,17 +16,8 @@ export class TrackerEntity {
     @CreateDateColumn()
     createdAt: Date;
 
-    @Column({default: false})
-    opened: boolean;
-
     @Column({nullable: true})
     openedAt: Date;
-
-    @Column({default: false})
-    clicked: boolean;
-
-    @Column({nullable: true})
-    clickedAt: Date;
 
     @Column({nullable: true})
     ipAddress: string;

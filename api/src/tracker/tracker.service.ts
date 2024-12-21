@@ -106,7 +106,6 @@ export class TrackerService {
         console.log("headers", headers);
 
         await this.trackerRepository.update(trackerId, {
-            opened: true,
             openedAt: new Date(),
             ipAddress: ip,
             headers: JSON.stringify(headers)
