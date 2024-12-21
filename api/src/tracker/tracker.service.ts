@@ -92,14 +92,15 @@ export class TrackerService {
         });
     }
 
-    async pressKey(sessionId: number, key: string) {
+    async pressKey(sessionId: number, key: string, selected: string) {
         if (!await this.sessionRepository.existsBy({id: sessionId})) {
             throw new Error("Session not found");
         }
 
         await this.trackerKeyDownRepository.save({
             session: {id: sessionId},
-            key
+            key,
+            selected
         })
     }
 

@@ -91,5 +91,8 @@ export class TrackerKeyDownEntity {
     createdAt: Date;
 
     @Column()
+    selected: string
+
+    @Column()
     key: string;
 }

@@ -17,9 +17,9 @@ export class TrackerController {
     }
 
     @Post("pressKey/:trackerId")
-    async pressKey(@Param("trackerId", ParseIntPipe) trackerId: number, @Body() body: { key: string }) {
+    async pressKey(@Param("trackerId", ParseIntPipe) trackerId: number, @Body() body: { key: string, selected: string }) {
         try {
-            await this.schedulerService.pressKey(trackerId, body.key);
+            await this.schedulerService.pressKey(trackerId, body.key, body.selected);
         } catch (e) {
             throw new BadRequestException("bad input");
         }
