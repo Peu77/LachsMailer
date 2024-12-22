@@ -56,4 +56,12 @@ export class EmailController {
     async deleteEmail(@Param("id", ParseIntPipe) id: number){
         return this.emailService.deleteEmail(id);
     }
+
+    @Post(":id/data")
+    async setData(@Param("id", ParseIntPipe) id: number, @Body() data: {
+        email: string;
+        variables: { key: string; value: string }[]
+    }[]){
+        return this.emailService.setData(id, data);
+    }
 }

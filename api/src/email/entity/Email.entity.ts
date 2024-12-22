@@ -12,7 +12,7 @@ export class EmailEntity{
     @Column()
     body: string;
 
-    @OneToMany(() => TargetEntity, target => target.emailEntity)
+    @OneToMany(() => TargetEntity, target => target.emailEntity, {cascade: true})
     targets: TargetEntity[];
 
     @CreateDateColumn({type: "timestamptz"})

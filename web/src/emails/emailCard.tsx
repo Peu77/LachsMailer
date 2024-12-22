@@ -1,22 +1,27 @@
 import {EmailEntity, useCancelSchedule, useDeleteEmailMutation, useDistributeScheduleDates} from "@/api/emailApi.ts";
-import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useToast} from "@/hooks/use-toast.ts";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {Target} from "@/emails/target.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {useState} from "react";
+import {useDialogStore} from "@/store/dialogStore.ts";
+import {SetDataDialog} from "@/emails/dialogs/setDataDialog.tsx";
 
 export const EmailCard= ({email}: {email: EmailEntity}) => {
     const deleteEmail = useDeleteEmailMutation(email.id)
     const distributeScheduleDates = useDistributeScheduleDates(email.id)
     const cancelSchedule = useCancelSchedule(email.id)
+    const {setDialog} = useDialogStore()
     const [days, setDays] = useState(30)
     const {toast} = useToast()
 
     return (
         <Card key={email.id} className="w-[600px]">
-            <CardHeader>{email.subject}</CardHeader>
+            <CardHeader>
+                <CardTitle className="">{email.subject}</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
                 <Textarea rows={5} value={email.body} disabled/>
 
@@ -43,7 +48,7 @@ export const EmailCard= ({email}: {email: EmailEntity}) => {
                 })}>Cancel</Button>
                 <Button onClick={() => distributeScheduleDates.mutate(days)}>Distribute</Button>
                 <Input placeholder={"days"} style={{maxWidth: "90px"}} type="number" value={days} onChange={(e) => setDays(Number(e.target.value))}/>
-                <p>days</p>
+                <Button onClick={() => setDialog(<SetDataDialog emailId={email.id}/>)}>Set-data</Button>
             </CardFooter>
         </Card>
     )

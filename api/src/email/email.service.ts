@@ -79,6 +79,14 @@ export class EmailService {
         });
     }
 
+    async setData(emailId: number, targets: { email: string; variables: { key: string; value: string }[] }[]) {
+        const email = await this.emailRepository.findOneByOrFail({id: emailId});
+
+        await this.targetRepository.delete({emailEntity: {id: emailId}});
+        email.targets = targets as any;
+        return this.emailRepository.save(email);
+    }
+
     getTargetById(id: number, relations: {} = {}) {
         return this.targetRepository.findOne({where: {id}, relations});
     }

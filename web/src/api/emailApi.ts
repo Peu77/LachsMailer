@@ -106,7 +106,7 @@ export function useDistributeScheduleDates(emailId: number) {
             return response.data
         },
         onSuccess: async () => {
-           await  queryClient.invalidateQueries(["emails"]);
+            await queryClient.invalidateQueries(["emails"]);
         }
     })
 }
@@ -118,6 +118,24 @@ export function useCancelSchedule(emailId: number) {
         mutationKey: ["emails", "cancel", emailId],
         mutationFn: async () => {
             const response = await axiosInstance.put<TargetEntity[]>(`/email/${emailId}/cancel`);
+            return response.data
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries(["emails"]);
+        }
+    })
+}
+
+export function useSetEmailData(emailId: number) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["emails", "set-data", emailId],
+        mutationFn: async (data: {
+            email: string;
+            variables: { key: string; value: string }[]
+        }[]) => {
+            const response = await axiosInstance.post<TargetEntity>(`/email/${emailId}/data`, data);
             return response.data
         },
         onSuccess: async () => {
