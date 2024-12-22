@@ -23,3 +23,5 @@ Example: `Hello {name} {lastname}`\
     - Window size
     - Ipaddress
     - CookiesEnabled
+
+![img.png](assets/img.png)
