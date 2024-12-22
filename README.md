@@ -3,7 +3,7 @@
 
 ### features:
 - Template system for replacing variables in the email body for each recipient\
-Example: `Hello {name} {lastname}`\
+Example: `Hello {name} {lastname}`
 
   | Email | name    | lastname    |
   | :---:   | :---: | :---: |
