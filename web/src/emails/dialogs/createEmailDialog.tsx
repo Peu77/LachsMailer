@@ -9,6 +9,7 @@ import {Textarea} from "@/components/ui/textarea.tsx";
 export const CreateEmailDialog = () => {
     const createEmail = useCreateEmailMutation();
     const {setDialog} = useDialogStore();
+    const [from, setFrom] = useState("");
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
 
@@ -19,10 +20,12 @@ export const CreateEmailDialog = () => {
                     <DialogTitle>Create Email</DialogTitle>
                 </DialogHeader>
 
+                <Input placeholder="From" value={from} onChange={(e) => setFrom(e.target.value)}/>
                 <Input placeholder="Subject" value={subject} onChange={(e) => setSubject(e.target.value)}/>
                 <Textarea rows={10}  placeholder="Body" value={body} onChange={(e) => setBody(e.target.value)}/>
                 <DialogFooter>
                     <Button disabled={createEmail.isLoading} onClick={() => createEmail.mutateAsync({
+                        from,
                         subject,
                         body
                     }).then(() => setDialog(null))}>Create</Button>

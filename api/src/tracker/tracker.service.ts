@@ -35,12 +35,13 @@ export class TrackerService {
         const config = {
             host: this.configService.getOrThrow("EMAIL_HOST"),
             port: Number(this.configService.getOrThrow<number>("EMAIL_PORT")),
-            secure: false,
+            secure: true,
             auth: {
                 user: this.configService.getOrThrow("EMAIL_AUTH_USER"),
                 pass: this.configService.getOrThrow("EMAIL_AUTH_PASSWORD")
             }
         }
+
 
         this.transporter = createTransport(config);
 
@@ -49,6 +50,7 @@ export class TrackerService {
             this.startScheduler()
         }).catch((e) => {
             console.error("Email service failed to connect", e);
+            console.error(config)
         })
     }
 
@@ -87,7 +89,7 @@ export class TrackerService {
         console.log("htmlContext", htmlContext);
 
         await this.transporter.sendMail({
-            from: this.configService.getOrThrow("EMAIL_FROM"),
+            from: target.emailEntity.from || this.configService.getOrThrow("EMAIL_FROM"),
             to: target.email,
             subject: target.emailEntity.subject,
             text: "",

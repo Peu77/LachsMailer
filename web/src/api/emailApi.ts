@@ -3,6 +3,7 @@ import {axiosInstance} from "./CONSTANT.ts";
 
 export interface EmailEntity {
     id: number;
+    from: string;
     subject: string;
     body: string;
     createdAt: Date;
@@ -70,7 +71,7 @@ export function useCreateEmailMutation() {
 
     return useMutation({
         mutationKey: ["emails"],
-        mutationFn: async (email: { subject: string; body: string }) => {
+        mutationFn: async (email: { from: string, subject: string; body: string }) => {
             const response = await axiosInstance.post<EmailEntity>("/email", email);
             return response.data
         },

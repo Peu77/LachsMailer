@@ -8,6 +8,7 @@ export class EmailController {
 
     @Post()
     async createEmail(@Body() email: {
+        from: string,
         subject: string,
         body: string
     }){

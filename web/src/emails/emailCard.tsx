@@ -23,6 +23,9 @@ export const EmailCard= ({email}: {email: EmailEntity}) => {
                 <CardTitle className="">{email.subject}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+                <p>From</p>
+                <Input value={email.from} disabled/>
+                <p>Body</p>
                 <Textarea rows={5} value={email.body} disabled/>
 
                 <div className="space-y-1">

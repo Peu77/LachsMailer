@@ -6,6 +6,9 @@ export class EmailEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({default: ""})
+    from: string;
+
     @Column()
     subject: string;
 
