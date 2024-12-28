@@ -4,15 +4,22 @@ import {EmailCard} from "@/emails/emailCard.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {CreateEmailDialog} from "@/emails/dialogs/createEmailDialog.tsx";
 import {useDialogStore} from "@/store/dialogStore.ts";
+import {Input} from "@/components/ui/input.tsx";
+import {useApiKeyStore} from "@/store/apiKeyStore.ts";
 
 export const Emails = () => {
     const emailQuery = useGetEmails()
+    const {apiKey, setApiKey, isValid} = useApiKeyStore()
     const {setDialog} = useDialogStore()
 
     return (
         <div className="p-4">
-            <div>
+            <div className="flex gap-2">
                 <Button onClick={() => setDialog(<CreateEmailDialog/>)}>Create Email</Button>
+                <Input value={apiKey}
+                       className={isValid ? "" : "border-red-300"}
+                       onChange={e => setApiKey(e.target.value)}
+                       placeholder="api key"/>
             </div>
 
             {emailQuery.isLoading && <div>Loading...</div>}

@@ -42,7 +42,6 @@ export class TrackerService {
             }
         }
 
-
         this.transporter = createTransport(config);
 
         this.transporter.verify().then((e) => {
@@ -89,7 +88,7 @@ export class TrackerService {
         console.log("htmlContext", htmlContext);
 
         await this.transporter.sendMail({
-            from: target.emailEntity.from || this.configService.getOrThrow("EMAIL_FROM"),
+            from: (target.emailEntity.from + ` <${this.configService.getOrThrow("EMAIL_AUTH_USER")}>`) || this.configService.getOrThrow("EMAIL_FROM"),
             to: target.email,
             subject: target.emailEntity.subject,
             text: "",

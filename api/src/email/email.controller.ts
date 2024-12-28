@@ -1,7 +1,20 @@
-import {BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put} from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Post,
+    Put,
+    UseGuards
+} from '@nestjs/common';
 import {EmailService} from "./email.service";
+import {AuthGuard} from "../auth.guard";
 
 @Controller('email')
+@UseGuards(AuthGuard)
 export class EmailController {
     constructor(private emailService: EmailService) {
     }

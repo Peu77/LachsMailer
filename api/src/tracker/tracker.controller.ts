@@ -1,7 +1,21 @@
-import {BadRequestException, Body, Controller, Get, Ip, Param, ParseIntPipe, Post, Put, Request} from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Get,
+    Ip,
+    Param,
+    ParseIntPipe,
+    Post,
+    Put,
+    Request,
+    UseGuards
+} from '@nestjs/common';
 import {TrackerService} from "./tracker.service";
+import {AuthGuard} from "../auth.guard";
 
 @Controller('tracker')
+@UseGuards(AuthGuard)
 export class TrackerController {
     constructor(private readonly schedulerService: TrackerService) {
     }
