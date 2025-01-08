@@ -35,6 +35,7 @@ const chartConfig = {
 
 export function EmailChart(props: {
     chartData: {
+        emails: number,
         send: number,
         open: number,
         click: number,
@@ -83,7 +84,7 @@ export function EmailChart(props: {
                                                     y={viewBox.cy}
                                                     className="fill-foreground text-3xl font-bold"
                                                 >
-                                                    {props.chartData.send}
+                                                    {props.chartData.emails}
                                                 </tspan>
                                                 <tspan
                                                     x={viewBox.cx}

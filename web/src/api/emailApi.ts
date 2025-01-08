@@ -6,6 +6,7 @@ export interface EmailEntity {
     from: string;
     subject: string;
     body: string;
+    lastDistributedAt: Date;
     createdAt: Date;
     updatedAt: Date;
     targets: TargetEntity[];

@@ -25,22 +25,26 @@ export const EmailCard = ({email}: { email: EmailEntity }) => {
     const {toast} = useToast()
 
     const chartData: {
+        emails: number,
         send: number,
         open: number,
         click: number,
         submit: number
     } = useMemo(() => {
-        if(!email.targets) return {send: 0, open: 0, click: 0, submit: 0}
+        if (!email.targets) return {emails: 0, send: 0, open: 0, click: 0, submit: 0}
 
-        const lastTrackers =  email.targets.map(target => target.trackers.sort((a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0]).filter(Boolean) as TrackerEntity[]
+        const lastTrackers = email.targets.map(target => target.trackers.sort((a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0]).filter((tracker: TrackerEntity) => {
+            if (!tracker) return false
+            return new Date(tracker.createdAt).getTime() > new Date(email.lastDistributedAt).getTime()
+        }) as TrackerEntity[]
 
         const send = lastTrackers.length
         const open = lastTrackers.filter(tracker => tracker.openedAt).length
-        const click = lastTrackers.filter(tracker => tracker.sessions.flatMap(session => session.submissions).length).length
+        const click = lastTrackers.filter(tracker => tracker.sessions).flat().length
         const submit = lastTrackers.flatMap(tracker => tracker.sessions.flatMap(session => session.submissions)).length
 
-        return {send, open, click, submit}
+        return {emails: email.targets.length, send, open, click, submit}
     }, [email.targets])
 
     return (
