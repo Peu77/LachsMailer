@@ -53,6 +53,10 @@ export class EmailService {
             }
         });
 
+        await this.emailRepository.update(id, {
+            lastDistributedAt: new Date()
+        })
+
         const targets = email.targets;
         const now = new Date();
         const max = new Date();

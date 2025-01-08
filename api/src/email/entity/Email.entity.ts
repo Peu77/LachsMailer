@@ -15,6 +15,9 @@ export class EmailEntity{
     @Column()
     body: string;
 
+    @Column({type: "timestamptz", nullable: true})
+    lastDistributedAt: Date;
+
     @OneToMany(() => TargetEntity, target => target.emailEntity, {cascade: true})
     targets: TargetEntity[];
 
