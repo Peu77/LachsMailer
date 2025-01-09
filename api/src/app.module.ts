@@ -4,7 +4,7 @@ import {AppService} from './app.service';
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import {EmailModule} from './email/email.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import { TrackerModule } from './tracker/tracker.module';
+import {TrackerModule} from './tracker/tracker.module';
 
 @Module({
     imports: [
@@ -15,8 +15,8 @@ import { TrackerModule } from './tracker/tracker.module';
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
-           useFactory: (config: ConfigService) => {
-                return  {
+            useFactory: (config: ConfigService) => {
+                return {
                     type: 'postgres',
                     host: config.get('DB_HOST'),
                     port: config.get('DB_PORT'),
@@ -28,7 +28,7 @@ import { TrackerModule } from './tracker/tracker.module';
                     ],
                     synchronize: true,
                 }
-           }
+            }
         }), EmailModule, TrackerModule],
     controllers: [AppController],
     providers: [AppService],

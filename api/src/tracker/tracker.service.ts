@@ -12,7 +12,6 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {createTransport, Transporter} from "nodemailer";
 import {ConfigService} from "@nestjs/config";
 
-
 @Injectable()
 export class TrackerService {
 
@@ -144,7 +143,6 @@ export class TrackerService {
         })
 
         console.log(`Session ${session.id} started at ${new Date().toLocaleDateString()}`);
-
 
         return session.id;
     }
