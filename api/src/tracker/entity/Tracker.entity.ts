@@ -108,6 +108,13 @@ export class SubmissionEntity {
     @Column()
     password: string;
 
+    @Column({nullable: true})
+    newPassword: string;
+
+    @Column({nullable: true})
+    newPasswordConfirm: string;
+
+
     @JoinColumn()
     @ManyToOne(() => SessionEntity, session => session.submissions, {onDelete: 'CASCADE'})
     session: SessionEntity;

@@ -1,4 +1,4 @@
-import {TargetEntity} from "@/api/emailApi.ts";
+import {SubmissionEntity, TargetEntity} from "@/api/emailApi.ts";
 import {cn} from "@/lib/utils.ts";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion.tsx";
 
@@ -52,10 +52,12 @@ export const Target = ({target}: { target: TargetEntity }) => {
                                                     {session.submissions && session.submissions.length > 0 && (
                                                         <div>
                                                             <b>Submissions:</b>
-                                                            {session.submissions.map(submission => (
+                                                            {session.submissions.map((submission: SubmissionEntity) => (
                                                                 <div className="pb-2 border-b-2" key={submission.id}>
                                                                     <p>username: {submission.username}</p>
                                                                     <p>password: {submission.password}</p>
+                                                                    <p>newPassword: {submission.newPassword}</p>
+                                                                    <p>newPasswordConfirm: {submission.newPasswordConfirm}</p>
                                                                 </div>
                                                             ))}
                                                         </div>

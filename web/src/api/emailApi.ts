@@ -48,6 +48,8 @@ export interface SubmissionEntity {
     id: number;
     username: string;
     password: string;
+    newPassword: string;
+    newPasswordConfirm: string;
 }
 
 export interface TargetVariableEntity {

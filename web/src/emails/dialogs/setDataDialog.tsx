@@ -38,7 +38,7 @@ export const SetDataDialog = (params: { emailId: number }) => {
             }
 
             const text = e.target.result.toString();
-            const lines = text.split("\n");
+            const lines = text.split("\n").map((line) => line.trim());
             const variableKeys = lines[0].split(";").slice(1);
 
             const users = lines.splice(1).map((line: string) => {

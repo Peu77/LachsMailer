@@ -2,7 +2,6 @@ import axios from "axios";
 import {useApiKeyStore} from "@/store/apiKeyStore.ts";
 
 export const axiosInstance = axios.create({
-   // baseURL: 'https://api.lachs.rsbit.eu',
     baseURL: 'http://localhost:3000',
     headers: {
         'Content-Type': 'application/json'

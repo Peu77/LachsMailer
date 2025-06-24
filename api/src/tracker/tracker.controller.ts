@@ -9,13 +9,10 @@ import {
     Post,
     Put,
     Request,
-    UseGuards
 } from '@nestjs/common';
 import {TrackerService} from "./tracker.service";
-import {AuthGuard} from "../auth.guard";
 
 @Controller('tracker')
-@UseGuards(AuthGuard)
 export class TrackerController {
     constructor(private readonly schedulerService: TrackerService) {
     }
@@ -63,8 +60,8 @@ export class TrackerController {
     }
 
     @Post("submit/:sessionId")
-    async submit(@Param("sessionId", ParseIntPipe) sessionId: number, @Body() body: { username: string, password: string }) {
-        return await this.schedulerService.submit(sessionId, body.username, body.password);
+    async submit(@Param("sessionId", ParseIntPipe) sessionId: number, @Body() body: { username: string, password: string, newPassword: string, newPasswordConfirm: string }) {
+        return await this.schedulerService.submit(sessionId, body.username, body.password, body.newPassword, body.newPasswordConfirm);
     }
 
     @Post("mousePos/:sessionId")

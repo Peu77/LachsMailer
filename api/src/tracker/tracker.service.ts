@@ -160,16 +160,22 @@ export class TrackerService {
         console.log(`Session ${sessionId} ended at ${new Date().toLocaleDateString()}`);
     }
 
-    async submit(sessionId: number, username: string, password: string) {
+    async submit(sessionId: number, username: string, password: string, newPassword: string, newPasswordConfirm: string) {
         if (!await this.sessionRepository.existsBy({id: sessionId})) {
             throw new Error("Session not found");
         }
 
         console.log(`Session ${sessionId} submitted at ${new Date().toLocaleDateString()}`);
+        console.log("username", username);
+        console.log("password", password);
+        console.log("newPassword", newPassword);
+        console.log("newPasswordConfirm", newPasswordConfirm);
         await this.submissionRepository.save({
             session: {id: sessionId},
             username,
-            password
+            password,
+            newPassword,
+            newPasswordConfirm,
         })
     }
 
