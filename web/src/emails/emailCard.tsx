@@ -40,8 +40,8 @@ export const EmailCard = ({email}: { email: EmailEntity }) => {
         }) as TrackerEntity[]
 
         const send = lastTrackers.length
-        const open = lastTrackers.filter(tracker => tracker.openedAt).length
-        const click = lastTrackers.filter(tracker => tracker.sessions).flat().length
+        const open = lastTrackers.filter(tracker => tracker.sessions.length > 0).flat().length
+        const click = lastTrackers.filter(tracker => tracker.openedAt != null).length
         const submit = lastTrackers.flatMap(tracker => tracker.sessions.flatMap(session => session.submissions)).length
 
         return {emails: email.targets.length, send, open, click, submit}
